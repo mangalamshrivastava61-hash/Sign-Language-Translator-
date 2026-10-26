@@ -1,12 +1,12 @@
-import bootstrap                                  # venv redirect + DLL setup
+import core.bootstrap                                 # venv redirect + DLL setup
 import os, cv2, time, pickle, threading
 import numpy as np
 import mediapipe as mp
-from config import (MODEL_FILE, CONFIDENCE_THRESHOLD, PAUSE_BETWEEN_GESTURES,
-                    HOLD_FRAMES_TO_COMMIT, MP_DETECTION_CONFIDENCE,
-                    MP_TRACKING_CONFIDENCE, TTS_RATE)
-from utils import extract_two_hands_features, normalize_single_hand
-from ui   import draw_translator_ui, draw_bounding_box
+from core.config import (MODEL_FILE, CONFIDENCE_THRESHOLD, PAUSE_BETWEEN_GESTURES,
+                         HOLD_FRAMES_TO_COMMIT, MP_DETECTION_CONFIDENCE,
+                         MP_TRACKING_CONFIDENCE, TTS_RATE)
+from core.utils import extract_two_hands_features, normalize_single_hand
+from core.ui   import draw_translator_ui, draw_bounding_box
 
 # ── Optional TTS ──────────────────────────────────────────────────────────────
 try:
@@ -83,10 +83,10 @@ try:
         rgb     = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         results = hands.process(rgb)
 
-        detected_sign       = None
-        confidence          = 0.0
-        num_hands           = len(results.multi_hand_landmarks) if results.multi_hand_landmarks else 0
-        all_x, all_y        = [], []
+        detected_sign = None
+        confidence    = 0.0
+        num_hands     = len(results.multi_hand_landmarks) if results.multi_hand_landmarks else 0
+        all_x, all_y  = [], []
 
         if num_hands > 0:
             for idx, lm in enumerate(results.multi_hand_landmarks):

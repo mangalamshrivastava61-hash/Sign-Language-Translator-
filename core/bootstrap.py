@@ -5,7 +5,7 @@ of every script before any third-party imports.
 """
 import os, sys, subprocess
 
-_base = os.path.dirname(os.path.abspath(__file__))
+_base = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # project root (one up from core/)
 _venv_py = os.path.join(_base, ".venv", "Scripts", "python.exe")
 
 # Re-launch under the virtual environment if needed

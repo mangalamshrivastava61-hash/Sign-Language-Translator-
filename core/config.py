@@ -4,8 +4,8 @@ Change a value here and it takes effect across all scripts instantly.
 """
 import os
 
-# Automatically find the project root relative to this file
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Project root is one level up from core/
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # ── Paths ──────────────────────────────────────────────────────────────────
 DATA_FILE  = os.path.join(BASE_DIR, "data",  "gestures_data.pickle")

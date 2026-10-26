@@ -1,11 +1,11 @@
-import bootstrap                                  # venv redirect + DLL setup
+import core.bootstrap                                 # venv redirect + DLL setup
 import os, pickle
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.ensemble         import RandomForestClassifier
 from sklearn.model_selection  import train_test_split
 from sklearn.metrics          import accuracy_score, classification_report, confusion_matrix, ConfusionMatrixDisplay
-from config import BASE_DIR, DATA_FILE, MODEL_FILE, CM_FILE, N_ESTIMATORS, TEST_SIZE
+from core.config import BASE_DIR, DATA_FILE, MODEL_FILE, CM_FILE, N_ESTIMATORS, TEST_SIZE
 
 os.makedirs(os.path.join(BASE_DIR, "model"), exist_ok=True)
 

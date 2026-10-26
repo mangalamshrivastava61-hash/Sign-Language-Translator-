@@ -1,10 +1,10 @@
-import bootstrap                                  # venv redirect + DLL setup
+import core.bootstrap                                 # venv redirect + DLL setup
 import os, cv2, pickle
 import mediapipe as mp
-from config import (BASE_DIR, DATA_FILE, SAMPLES_PER_GESTURE,
-                    MP_MAX_HANDS, MP_DETECTION_CONFIDENCE, MP_TRACKING_CONFIDENCE)
-from utils import extract_two_hands_features
-from ui   import draw_collector_ui
+from core.config import (BASE_DIR, DATA_FILE, SAMPLES_PER_GESTURE,
+                         MP_MAX_HANDS, MP_DETECTION_CONFIDENCE, MP_TRACKING_CONFIDENCE)
+from core.utils import extract_two_hands_features
+from core.ui   import draw_collector_ui
 
 # ── Setup ─────────────────────────────────────────────────────────────────────
 os.makedirs(os.path.join(BASE_DIR, "data"), exist_ok=True)
