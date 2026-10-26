@@ -30,8 +30,24 @@ print("Loading dataset...")
 with open(DATA_FILE, 'rb') as f:
     dataset = pickle.load(f)
 
-X = np.array(dataset['features'])
-y = np.array(dataset['labels'])
+raw_features = dataset['features']
+raw_labels = dataset['labels']
+
+if not raw_features:
+    print("Error: Dataset is empty! Please record signs using '01_collect_data.py'.")
+    exit(1)
+
+# Auto-standardize feature dimensions (pads any 63-dim single-hand samples to 126-dim)
+target_dim = max(len(f) for f in raw_features)
+standardized_features = []
+for f in raw_features:
+    arr = np.array(f, dtype=np.float32)
+    if len(arr) < target_dim:
+        arr = np.pad(arr, (0, target_dim - len(arr)), mode='constant')
+    standardized_features.append(arr)
+
+X = np.array(standardized_features)
+y = np.array(raw_labels)
 classes = np.unique(y)
 
 if len(classes) < 2:
@@ -40,9 +56,9 @@ if len(classes) < 2:
     exit(1)
 
 print("=" * 60)
-print(f"Dataset summary:")
+print(f"Dataset Summary:")
 print(f" - Total samples: {len(X)}")
-print(f" - Feature dimension: {X.shape[1]} (21 normalized 3D landmarks)")
+print(f" - Feature dimension: {X.shape[1]} ({'Two-Hand 126D' if X.shape[1] == 126 else 'Single-Hand 63D'})")
 print(f" - Classes ({len(classes)}): {list(classes)}")
 for c in classes:
     print(f"   * '{c}': {np.sum(y == c)} samples")
@@ -80,7 +96,7 @@ cm = confusion_matrix(y_test, y_pred, labels=classes)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=classes)
 fig, ax = plt.subplots(figsize=(8, 6))
 disp.plot(cmap=plt.cm.Blues, ax=ax, xticks_rotation=45)
-plt.title(f"Random Forest - Sign Language Confusion Matrix ({acc*100:.1f}%)")
+plt.title(f"Random Forest Confusion Matrix ({acc*100:.1f}%)")
 plt.tight_layout()
 plt.savefig(CONFUSION_MATRIX_FILE, dpi=300)
 print(f"Confusion matrix plot saved: {CONFUSION_MATRIX_FILE}")
@@ -95,4 +111,4 @@ with open(MODEL_FILE, 'wb') as f:
     pickle.dump(model_payload, f)
 
 print(f"Trained model saved to: {MODEL_FILE}")
-print("\nAll done! Now run 'python 03_realtime_translator.py' to test your signs in real time!")
+print("\nAll done! Now run 'python 03_realtime_translator.py' to test in real time!")
