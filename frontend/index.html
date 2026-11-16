@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Language Translator</title>
+  
+  <!-- Modern Clean Typography -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+  <!-- Navigation / Header -->
+  <header class="header">
+    <div class="brand">
+      <h1 class="header-title">Sign Language Translator</h1>
+    </div>
+
+    <button class="header-help" id="btnHelp">
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10"></circle>
+        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+      </svg>
+      How it works
+    </button>
+  </header>
+
+  <!-- Main Grid Workspace -->
+  <main class="main">
+
+    <!-- Left: Vision / Camera Workspace -->
+    <section class="camera-section">
+      <div class="glass-panel camera-card">
+        <div class="camera-header">
+          <div class="camera-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+              <circle cx="12" cy="13" r="4"></circle>
+            </svg>
+            Live Gesture Feed
+          </div>
+        </div>
+
+        <div class="camera-frame" id="cameraFrame">
+          <img id="cameraFeed" alt="Camera feed stream" />
+          <div class="camera-placeholder" id="cameraPlaceholder">
+            <div class="loader-spinner"></div>
+            <span>Synchronizing video pipeline...</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="camera-controls">
+        <button class="btn btn-danger" id="btnClear">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="3 6 5 6 21 6"></polyline>
+            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+          </svg>
+          Clear Sentence
+        </button>
+        <button class="btn btn-ghost" id="btnDeleteLast">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+            <line x1="18" y1="9" x2="12" y2="15"></line>
+            <line x1="12" y1="9" x2="18" y2="15"></line>
+          </svg>
+          Undo Last Word
+        </button>
+      </div>
+    </section>
+
+    <!-- Right: Realtime Recognition Output -->
+    <aside class="glass-panel detection-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Recognition Feed</h2>
+        <div class="status-pill">
+          <span class="status-dot" id="statusDot"></span>
+          <span id="statusText">Ready</span>
+        </div>
+      </div>
+
+      <div class="insight-section">
+        <span class="panel-label">Detected Gesture</span>
+        <div class="sign-display-card">
+          <div class="detected-sign empty" id="detectedSign">Awaiting hand gesture...</div>
+        </div>
+      </div>
+
+      <div class="insight-section confidence-box">
+        <span class="panel-label">Prediction Certainty</span>
+        <div class="confidence-row">
+          <div class="confidence-track">
+            <div class="confidence-fill" id="confidenceFill"></div>
+          </div>
+          <span class="confidence-value" id="confidenceValue">0%</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Bottom: Real-Time Sentence Strip -->
+    <div class="glass-panel sentence-strip">
+      <span class="sentence-label-tag">Sentence</span>
+      <span class="sentence-text empty" id="sentenceText">Recognized words will construct here in real-time...</span>
+      <span class="sentence-meta" id="wordCount">0 words</span>
+      <button class="btn-copy" id="btnCopy" title="Copy to clipboard">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+        </svg>
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Ambient Shortcuts Hint -->
+  <p class="hint">
+    Hold gesture steady to commit automatically, or tap <kbd>Space</kbd> to add immediately. Press <kbd>Backspace</kbd> to delete.
+  </p>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <span>Sign Language Translator</span>
+    <span>Built with MediaPipe & OpenCV</span>
+  </footer>
+
+  <!-- Help / Info Modal -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <button class="modal-close" id="modalClose">&times;</button>
+      <h2>How It Works</h2>
+      <p>
+        Your camera stream is parsed live into 21 high-dimensional 3D skeletal hand landmarks via MediaPipe. Features are normalized around the wrist joint to ensure invariant tracking across scale, distance, and tilt.
+      </p>
+      <p>
+        An ensemble Random Forest model evaluates coordinate vector topologies in real time. Steady gestures (~0.5s stability) are auto-committed to your sentence stream, or you can commit on-demand with <kbd>Space</kbd>.
+      </p>
+    </div>
+  </div>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>
